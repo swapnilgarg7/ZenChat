@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'doctors_screen.dart';
-import 'home_screen.dart';
 import 'profile_screen.dart';
+import 'home_screen.dart';
+import 'docs_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,7 +15,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = const [
     HomeScreen(),
-    DoctorsScreen(),
+    DocsScreen(),
     ProfileScreen(),
   ];
 
