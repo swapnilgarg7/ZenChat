@@ -36,8 +36,15 @@ class _LoginPageState extends State<LoginPage> {
                     height: MediaQuery.of(context).size.height * 0.3,
                     color: Colors.teal[700],
                     child: Center(
-                        // image to be add
+                      // image to be add
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/LogoLogin.png"),
+                              fit: BoxFit.scaleDown),
                         ),
+                      ),
+                    ),
                   ),
                   Container(
                     color: Colors.white,
