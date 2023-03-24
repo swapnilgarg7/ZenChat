@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           splashTransition: SplashTransition.fadeTransition,
           splashIconSize: 200,
           backgroundColor: const Color(0xFF9EE3D6),
-          nextScreen: const MainScreen()),
+          nextScreen: const LoginPage()),
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
