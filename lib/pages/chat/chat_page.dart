@@ -19,7 +19,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _messages = <ChatMessage>[
     ChatMessage(
-        'I AM YOUR PERSONAL THERAPY ASSISTANT. YOU CAN CALL ME ZENCHAT. HOW MAY I ASSIST YOU TODAY?',
+        'I am your personal therapy assistant. You can call me ZenChat. How may I assist you today?',
         false),
   ];
   var _awaitingResponse = false;
@@ -27,7 +27,17 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
+      appBar: AppBar(
+        title: const Text(
+          "Talk with ZenChat",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        toolbarHeight: 80,
+        backgroundColor: Colors.teal[700],
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
           Expanded(
