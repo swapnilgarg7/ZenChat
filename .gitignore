@@ -44,4 +44,4 @@ app.*.map.json
 /android/app/release
 
 # OpenAI Key
-/lib/chat/key.dart
+/lib/pages/chat/key.dart
