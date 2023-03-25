@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:zenchat/Helper/sharedPreference.dart';
 import 'package:zenchat/services/databaseService.dart';
 
 class AuthService {
@@ -37,6 +38,16 @@ class AuthService {
   }
 
   // sign out
+  Future signOut() async {
+    try {
+      await SharedPreferenceFucntion.saveUserLoggedInStatus(false);
+      await SharedPreferenceFucntion.saveUserEmailSF("");
+      await SharedPreferenceFucntion.saveUserNameSF("");
+      await firebaseAuth.signOut();
+    } catch (e) {
+      return null;
+    }
+  }
 
   // reset the password
   Future resetPassword({required String email}) async {
