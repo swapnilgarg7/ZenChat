@@ -1,12 +1,11 @@
 import 'chat_message.dart';
 import 'package:dart_openai/openai.dart';
-import 'shared/key.dart';
 
 class ChatApi {
   static const _model = 'gpt-3.5-turbo';
 
   ChatApi() {
-    OpenAI.apiKey = key.openai_key;
+    OpenAI.apiKey = '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';
     // OpenAI.organization = 'zenchat';
   }
 
