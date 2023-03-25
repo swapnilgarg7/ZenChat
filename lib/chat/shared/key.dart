@@ -1,3 +1,3 @@
 class key{
-  static openai_key = "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"
+  static openai_key = "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";
 }
