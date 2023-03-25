@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Text.rich(
                               TextSpan(
-                                  text: "Don't have an account?",
+                                  text: "Don't have an account? ",
                                   style: const TextStyle(
                                       color: Colors.teal, fontSize: 14),
                                   children: <TextSpan>[

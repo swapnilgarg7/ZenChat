@@ -42,6 +42,10 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   intl: ^0.18.0
   datetime_picker_formfield: ^2.0.1
+  shared_preferences: ^2.0.0-nullsafety.1
+  firebase_core: ^2.8.0
+  firebase_auth: ^4.2.2
+  cloud_firestore: ^4.4.5
 
 dev_dependencies:
   flutter_test:
