@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       String? userEmail = await SharedPreferenceFucntion.getUserEmailFromSF();
       if (userEmail == null) {
         // user email not found
-        email = "UnknonwnEmail@anonymous.com";
+        email = "unkown@anonymous.com";
       } else {
         // user email found, fetch user data from database
         QuerySnapshot userData =
@@ -72,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Error occured while fetching the data
       setState(() {
         name = "Anonymous";
-        email = "UnknownEmail@anonymous.com";
+        email = "unknown@anonymous.com";
         gender = "unknown";
       });
     } finally {
@@ -123,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.grey[700],
+                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.grey[700],
+                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -139,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.grey[700],
+                              color: Colors.black,
                             ),
                           ),
                         ],
