@@ -176,9 +176,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text("Get Register"),
-                              content:
-                                  const Text("Are you sure to get register?"),
+                              title: const Text("Get Registered"),
+                              content: const Text("Are you sure to register?"),
                               actions: [
                                 IconButton(
                                   onPressed: () {
@@ -214,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.teal,
                     ),
                     title: const Text(
-                      "Get Register",
+                      "Get Registered",
                       style: TextStyle(
                         color: Colors.teal,
                         fontSize: 20,
@@ -332,25 +331,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const SizedBox(height: 10),
             InkWell(
               onTap: () {
                 _showOptionsDialog();
               },
-              child: CircleAvatar(
-                radius: 80,
-                backgroundImage: _imageFile != null
-                    ? FileImage(_imageFile!)
-                    : AssetImage('assets/profile.png') as ImageProvider<Object>,
+              child: Align(
+                alignment: Alignment.center,
+                child: CircleAvatar(
+                  radius: 80,
+                  backgroundImage: _imageFile != null
+                      ? FileImage(_imageFile!)
+                      : AssetImage('assets/profile.png')
+                          as ImageProvider<Object>,
+                ),
               ),
             ),
             const SizedBox(height: 10),
             Container(
-              color: Theme.of(context).primaryColor,
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).primaryColor,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -362,20 +368,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           'Name: $name',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
+                        const SizedBox(height: 5),
                         Text(
                           'Gender: $gender',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           'Email: $email',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
                             color: Colors.white,
                           ),
                         ),
