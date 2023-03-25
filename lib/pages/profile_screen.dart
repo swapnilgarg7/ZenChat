@@ -365,7 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Name: $name',
+                          '$name',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontWeight: FontWeight.bold,
