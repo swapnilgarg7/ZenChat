@@ -26,4 +26,16 @@ class DataBaseService {
         await userCollection.where("email", isEqualTo: email).get();
     return snapshot;
   }
+
+  // getting the gender using email id
+  Future<String?> getGenderFromEmail(String email) async {
+    QuerySnapshot snapshot =
+        await userCollection.where("email", isEqualTo: email).get();
+    if (snapshot.docs.isNotEmpty) {
+      DocumentSnapshot documentSnapshot = snapshot.docs.first;
+      return documentSnapshot.get("gender");
+    } else {
+      return null;
+    }
+  }
 }
