@@ -37,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isanonymous = false;
   AuthService authService = AuthService();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -59,7 +58,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // user email not found
 
         email = "UnknonwnEmail@anonymous.com";
-
       } else {
         // user email found, fetch user data from database
         QuerySnapshot userData =
@@ -72,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             gender = userData.docs[0]['gender'];
 
             _isanonymous = false;
-
           });
         } else {
           // user data not found, set default values
@@ -82,7 +79,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             gender = "Unknown";
 
             _isanonymous = false;
-
           });
         }
       }
@@ -93,7 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         email = "UnknownEmail@anonymous.com";
         gender = "unknown";
         _isanonymous = true;
-
       });
     } finally {
       // hide loading indicator
@@ -113,7 +108,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       drawer: Drawer(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
-
           children: <Widget>[
             _isanonymous
                 ? ListTile(
@@ -281,62 +275,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-
             Lottie.network(
                 'https://assets3.lottiefiles.com/packages/lf20_WKdnG2.json',
                 repeat: false,
                 height: 250,
                 width: 250),
             Container(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Name: $name',
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-
-                              color: Colors.white,
-
-                            ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Name: $name',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            color: Colors.white,
                           ),
-                          Text(
-                            'Gender: $gender',
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-
-                              color: Colors.white,
-
-                            ),
+                        ),
+                        Text(
+                          'Gender: $gender',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            color: Colors.white,
                           ),
-                          Text(
-                            'Email: $email',
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-
-                              color: Colors.white,
-
-                            ),
+                        ),
+                        Text(
+                          'Email: $email',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            color: Colors.white,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                    ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
