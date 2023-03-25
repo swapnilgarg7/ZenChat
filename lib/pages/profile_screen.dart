@@ -9,6 +9,8 @@ import 'package:zenchat/pages/reset_password.dart';
 import 'package:zenchat/services/authService.dart';
 import 'package:zenchat/services/databaseService.dart';
 import 'package:lottie/lottie.dart';
+import 'package:zenchat/Helper/sharedPreference.dart';
+import 'package:zenchat/services/databaseService.dart';
 import 'subs.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -31,8 +33,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String email = "";
   String gender = "";
   bool _isLoading = false;
+
   bool _isanonymous = false;
   AuthService authService = AuthService();
+
 
   @override
   void initState() {
@@ -53,7 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       String? userEmail = await SharedPreferenceFucntion.getUserEmailFromSF();
       if (userEmail == null) {
         // user email not found
+
         email = "UnknonwnEmail@anonymous.com";
+
       } else {
         // user email found, fetch user data from database
         QuerySnapshot userData =
@@ -64,7 +70,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             name = userData.docs[0]['fullName'];
             email = userData.docs[0]['email'];
             gender = userData.docs[0]['gender'];
+
             _isanonymous = false;
+
           });
         } else {
           // user data not found, set default values
@@ -72,7 +80,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             name = "Anonymous";
             email = userEmail;
             gender = "Unknown";
+
             _isanonymous = false;
+
           });
         }
       }
@@ -83,6 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         email = "UnknownEmail@anonymous.com";
         gender = "unknown";
         _isanonymous = true;
+
       });
     } finally {
       // hide loading indicator
@@ -102,6 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       drawer: Drawer(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
+
           children: <Widget>[
             _isanonymous
                 ? ListTile(
@@ -269,14 +281,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 15),
+
             Lottie.network(
                 'https://assets3.lottiefiles.com/packages/lf20_WKdnG2.json',
                 repeat: false,
-                height: 300,
-                width: 300),
+                height: 250,
+                width: 250),
             Container(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -290,7 +304,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
+
                               color: Colors.white,
+
                             ),
                           ),
                           Text(
@@ -298,7 +314,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
+
                               color: Colors.white,
+
                             ),
                           ),
                           Text(
@@ -306,7 +324,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
+
                               color: Colors.white,
+
                             ),
                           ),
                         ],
