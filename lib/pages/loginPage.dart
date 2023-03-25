@@ -1,7 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zenchat/Helper/sharedPreference.dart';
+import 'package:zenchat/pages/main_screen.dart';
 import 'package:zenchat/pages/registerPage.dart';
+import 'package:zenchat/services/authService.dart';
+import 'package:zenchat/services/databaseService.dart';
+import 'package:zenchat/widget/snackbar.dart';
 import '../Helper/validator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String password = "";
   bool _isLoading = false;
   bool passwordVisible = true;
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,7 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  login();
+                                },
                                 child: const Text(
                                   "Log in",
                                   style: TextStyle(
@@ -252,5 +263,42 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
     );
+  }
+
+  // login
+  login() async {
+    if (formkey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      await authService
+          .loginInUserWithEmailAndPassword(email, password)
+          .then((value) async {
+        if (value == true) {
+          QuerySnapshot snapshot =
+              await DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                  .gettingUserData(email);
+          // save the values to shared preference
+          await SharedPreferenceFucntion.saveUserLoggedInStatus(true);
+          await SharedPreferenceFucntion.saveUserEmailSF(email);
+          await SharedPreferenceFucntion.saveUserNameSF(
+              snapshot.docs[0]['fullName']);
+          // move to home page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            ),
+          );
+          _emailTextController.clear();
+          _passwordTextController.clear();
+        } else {
+          showSnackbar(context, Colors.redAccent, value);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    }
   }
 }
