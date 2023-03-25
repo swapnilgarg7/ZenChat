@@ -31,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           "Name : ",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           "Gender : ",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           "Email : ",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -56,8 +56,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: ElevatedButton.styleFrom(
             primary: Colors.teal[700],
             onPrimary: Colors.white,
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
           ),
-          child: Text('SHOW SUBSCRIPTIONS'),
+          child: Text('Show Subscriptions',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              )),
           onPressed: () => subscription(context),
         ),
       ],
