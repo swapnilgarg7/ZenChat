@@ -2,6 +2,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:zenchat/Helper/sharedPreference.dart';
+import 'package:zenchat/pages/loginPage.dart';
+import 'package:zenchat/pages/registerPage.dart';
+import 'package:zenchat/pages/reset_password.dart';
+import 'package:zenchat/services/authService.dart';
+import 'package:zenchat/services/databaseService.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zenchat/Helper/sharedPreference.dart';
 import 'package:zenchat/services/databaseService.dart';
@@ -28,6 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String gender = "";
   bool _isLoading = false;
 
+  bool _isanonymous = false;
+  AuthService authService = AuthService();
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       String? userEmail = await SharedPreferenceFucntion.getUserEmailFromSF();
       if (userEmail == null) {
         // user email not found
-        email = "unkown@anonymous.com";
+
+        email = "UnknonwnEmail@anonymous.com";
+
       } else {
         // user email found, fetch user data from database
         QuerySnapshot userData =
@@ -58,6 +70,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             name = userData.docs[0]['fullName'];
             email = userData.docs[0]['email'];
             gender = userData.docs[0]['gender'];
+
+            _isanonymous = false;
+
           });
         } else {
           // user data not found, set default values
@@ -65,6 +80,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             name = "Anonymous";
             email = userEmail;
             gender = "Unknown";
+
+            _isanonymous = false;
+
           });
         }
       }
@@ -72,8 +90,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Error occured while fetching the data
       setState(() {
         name = "Anonymous";
-        email = "unknown@anonymous.com";
+        email = "UnknownEmail@anonymous.com";
         gender = "unknown";
+        _isanonymous = true;
+
       });
     } finally {
       // hide loading indicator
@@ -93,7 +113,167 @@ class _ProfileScreenState extends State<ProfileScreen> {
       drawer: Drawer(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
-          children: <Widget>[],
+
+          children: <Widget>[
+            _isanonymous
+                ? ListTile(
+                    onTap: () async {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Get Register"),
+                              content:
+                                  const Text("Are you sure to get register?"),
+                              actions: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.cancel,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    await authService.signOut();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const RegisterPage()),
+                                        (route) => false);
+                                  },
+                                  icon: const Icon(
+                                    Icons.done,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(
+                      Icons.person_outline,
+                      color: Colors.teal,
+                    ),
+                    title: const Text(
+                      "Get Register",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : ListTile(
+                    onTap: () async {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Reset Password"),
+                              content: const Text(
+                                  "Are you sure to reset the password?"),
+                              actions: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.cancel,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    await authService.signOut();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ResetPassword()),
+                                        (route) => false);
+                                  },
+                                  icon: const Icon(
+                                    Icons.done,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(
+                      Icons.password_rounded,
+                      color: Colors.teal,
+                    ),
+                    title: const Text(
+                      "Reset Password",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+            ListTile(
+              onTap: () async {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("LogOut"),
+                        content: const Text("Are you sure to logout?"),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await authService.signOut();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()),
+                                  (route) => false);
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(
+                Icons.exit_to_app_outlined,
+                color: Colors.teal,
+              ),
+              title: const Text(
+                "Log out",
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: Center(
@@ -101,6 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+
             Lottie.network(
                 'https://assets3.lottiefiles.com/packages/lf20_WKdnG2.json',
                 repeat: false,
@@ -123,7 +304,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
+
+                              color: Colors.white,
+
                             ),
                           ),
                           Text(
@@ -131,7 +314,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
+
+                              color: Colors.white,
+
                             ),
                           ),
                           Text(
@@ -139,7 +324,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
-                              color: Colors.black,
+
+                              color: Colors.white,
+
                             ),
                           ),
                         ],
@@ -152,22 +339,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.teal[700],
-                onPrimary: Colors.white,
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-              ),
-              onPressed: () => subscription(context),
-              child: const Text(
-                "Go Premium Now!",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+                onPressed: () => subscription(context),
+                child: const Text(
+                  "Go Premium Now!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
