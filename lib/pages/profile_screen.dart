@@ -8,10 +8,11 @@ import 'package:zenchat/pages/registerPage.dart';
 import 'package:zenchat/pages/reset_password.dart';
 import 'package:zenchat/services/authService.dart';
 import 'package:zenchat/services/databaseService.dart';
-import 'package:lottie/lottie.dart';
-import 'package:zenchat/Helper/sharedPreference.dart';
-import 'package:zenchat/services/databaseService.dart';
+import 'package:path_provider/path_provider.dart';
 import 'subs.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -21,6 +22,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  // function to get subscription
   void subscription(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
@@ -33,9 +35,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String email = "";
   String gender = "";
   bool _isLoading = false;
-
+  File? _imageFile;
+  final picker = ImagePicker();
   bool _isanonymous = false;
   AuthService authService = AuthService();
+
+  // function to show the bottom sheet dialog for changing or removing image
+  Future<void> _showOptionsDialog() async {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Change Photo'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final PickedFile =
+                      await picker.getImage(source: ImageSource.gallery);
+                  if (PickedFile != null) {
+                    setState(() {
+                      _imageFile = File(PickedFile.path);
+                    });
+
+                    // Save the image to the documents directory
+                    final directory = await getApplicationDocumentsDirectory();
+                    final imagePath = '${directory.path}/profile_image.jpg';
+                    await _imageFile!.copy(imagePath);
+                  }
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete),
+                title: Text('Remove Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    _imageFile = null;
+                  });
+                },
+              )
+            ],
+          );
+        });
+  }
 
   @override
   void initState() {
@@ -43,8 +88,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     // call the gettingUserData function to fetch user data
     gettingUserData();
+    _loadImage();
   }
 
+  // function to upload the image
+  Future<void> _loadImage() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = '${directory.path}/profile_image.jpg';
+    final imageFile = File(imagePath);
+    if (imageFile.existsSync()) {
+      setState(() {
+        _imageFile = imageFile;
+      });
+    }
+  }
+
+  // function to get the user data
   Future<void> gettingUserData() async {
     // show loading indicator while fetching data
     setState(() {
@@ -275,11 +334,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Lottie.network(
-                'https://assets3.lottiefiles.com/packages/lf20_WKdnG2.json',
-                repeat: false,
-                height: 250,
-                width: 250),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                _showOptionsDialog();
+              },
+              child: CircleAvatar(
+                radius: 80,
+                backgroundImage: _imageFile != null
+                    ? FileImage(_imageFile!)
+                    : AssetImage('assets/profile.png') as ImageProvider<Object>,
+              ),
+            ),
+            const SizedBox(height: 10),
             Container(
               color: Theme.of(context).primaryColor,
               margin: const EdgeInsets.symmetric(horizontal: 20),
