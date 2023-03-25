@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zenchat/Helper/sharedPreference.dart';
 import 'package:zenchat/pages/main_screen.dart';
 import 'package:zenchat/pages/registerPage.dart';
+import 'package:zenchat/pages/reset_password.dart';
 import 'package:zenchat/services/authService.dart';
 import 'package:zenchat/services/databaseService.dart';
 import 'package:zenchat/widget/snackbar.dart';
@@ -217,7 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                             // forget password option
                             const SizedBox(height: 8),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                resetPassword();
+                              },
                               child: const Text(
                                 "Forget Password ?",
                                 style: TextStyle(
@@ -300,5 +303,16 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     }
+  }
+
+  // reset the password
+  resetPassword() async {
+    // move to resetPassword page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ResetPassword(),
+      ),
+    );
   }
 }

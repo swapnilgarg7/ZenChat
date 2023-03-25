@@ -39,4 +39,18 @@ class AuthService {
   // sign out
 
   // reset the password
+  Future resetPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return 'No user found for that email.';
+      } else {
+        return 'An error occurred while resetting password. Please try again later.';
+      }
+    } catch (e) {
+      return 'An error occurred while resetting password. Please try again later.';
+    }
+  }
 }
