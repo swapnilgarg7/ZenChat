@@ -46,6 +46,12 @@ dependencies:
   firebase_core: ^2.8.0
   firebase_auth: ^4.2.2
   cloud_firestore: ^4.4.5
+  image_picker: ^0.8.7
+  firebase_storage: ^11.0.16
+  chat_gpt_sdk: ^2.0.6
+  dart_openai: ^1.8.4
+  
+  
 
 dev_dependencies:
   flutter_test:

@@ -1,21 +1,9 @@
+import 'chat_api.dart';
+import 'chat_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'chat/chat_api.dart';
-import 'chat/chat_page.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(child: ChatPage(chatApi: ChatApi()));
-  }
+void main() {
+  runApp(ChatApp(chatApi: ChatApi()));
 }
 
 class ChatApp extends StatelessWidget {
