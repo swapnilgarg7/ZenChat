@@ -25,13 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
       children: [
         Text('Profile Screen'),
-        Image(image: image, width: 75, height: 75),
+        // Image(image: image, width: 75, height: 75),
         Text('Name'),
         Text('Gender'),
         Text('Email'),
         ElevatedButton(
           child: Text('SHOW SUBSCRIPTIONS'),
-          onPressed: () => show_subscription(),
+          onPressed: () => subscription(context),
         ),
       ],
     ));
