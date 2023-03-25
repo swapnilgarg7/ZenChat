@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(height: 18),
+                            const SizedBox(height: 18),
                             Text(
                               "Login",
                               style: GoogleFonts.merriweather(
