@@ -1,8 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zenchat/Helper/sharedPreference.dart';
 import 'package:zenchat/pages/loginPage.dart';
 import 'package:intl/intl.dart';
+import 'package:zenchat/pages/main_screen.dart';
+import 'package:zenchat/services/authService.dart';
+import 'package:zenchat/widget/snackbar.dart';
 import '../Helper/validator.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
@@ -26,6 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isLoading = false;
   bool passwordVisible = true;
   var genderOptions = ['Male', 'Female', 'Others'];
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             Text.rich(
                               TextSpan(
-                                  text: "Already Registered?",
+                                  text: "Already Registered? ",
                                   style: const TextStyle(
                                       color: Colors.teal, fontSize: 14),
                                   children: <TextSpan>[
@@ -257,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                             ),
                             const SizedBox(height: 25),
-                            // Log in button
+                            // Register button
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -268,7 +273,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  register();
+                                },
                                 child: const Text(
                                   "Sign up",
                                   style: TextStyle(
@@ -287,5 +294,42 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
     );
+  }
+
+  // register
+  register() async {
+    if (formkey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      await authService
+          .registerUserWithEmailAndPassword(
+              name, email, password, gender, _selectedDate)
+          .then((value) async {
+        if (value == true) {
+          // saving the shared prefernce data
+          await SharedPreferenceFucntion.saveUserLoggedInStatus(true);
+          await SharedPreferenceFucntion.saveUserEmailSF(email);
+          await SharedPreferenceFucntion.saveUserNameSF(name);
+
+          // move to main screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            ),
+          );
+
+          _emailTextController.clear();
+          _nameTextController.clear();
+          _passwordTextController.clear();
+        } else {
+          showSnackbar(context, Colors.redAccent, value);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    }
   }
 }

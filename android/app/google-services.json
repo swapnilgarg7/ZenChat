@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "416259583822",
+    "project_id": "zenchat-55b21",
+    "storage_bucket": "zenchat-55b21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416259583822:android:07362f86b11e04d0a7381f",
+        "android_client_info": {
+          "package_name": "com.example.zenchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416259583822-f7ul6k4n17pqjp198tlcf5bs2s5rufv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zenchat",
+            "certificate_hash": "ea4aa2304b127ea0936ff93a44ec910807b12739"
+          }
+        },
+        {
+          "client_id": "416259583822-gdo0a5o86gbj8ir6uk8fn7ujpi6msgm2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9tFEMR8stG36kBYt7-JO0Ti38wAvaC8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416259583822-gdo0a5o86gbj8ir6uk8fn7ujpi6msgm2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
