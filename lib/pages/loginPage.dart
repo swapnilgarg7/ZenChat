@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -205,7 +204,9 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  anonymous();
+                                },
                                 child: const Text(
                                   "Go Anonymous",
                                   style: TextStyle(
@@ -312,6 +313,17 @@ class _LoginPageState extends State<LoginPage> {
       context,
       MaterialPageRoute(
         builder: (context) => const ResetPassword(),
+      ),
+    );
+  }
+
+  // Anonymous option
+  anonymous() async {
+    // directly move to mainScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainScreen(),
       ),
     );
   }
