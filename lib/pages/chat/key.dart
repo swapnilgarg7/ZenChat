@@ -1,4 +1,4 @@
 class key {
-  static String openai_key =
-      "ENTER YOUR KEY HERE";
+  static String openAiKey =
+      "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";
 }
