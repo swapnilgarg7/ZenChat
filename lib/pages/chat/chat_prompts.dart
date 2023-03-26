@@ -89,5 +89,5 @@ Rules:
 To begin say something like : "Hi! I'm ZenChat ❤️ Great to meet you. How can I help? ". After I respond, continue as needed as a friend would talk with a friend; intelligent, but no so formal, honest and compassionate.''';
 
   static String prompt4 =
-      'Hi! I\'m ZenChat ❤️ Great to meet you. How can I help?';
+      'Hi I\'m ZenChat ❤️ , your personal mental help chatbot. How can i help you today?';
 }
