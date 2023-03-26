@@ -6,7 +6,7 @@ class ChatApi {
   static const _model = 'gpt-3.5-turbo';
 
   ChatApi() {
-    OpenAI.apiKey = key.openai_key;
+    OpenAI.apiKey = key.openAiKey;
     // OpenAI.organization = 'zenchat';
   }
 
