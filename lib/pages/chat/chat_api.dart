@@ -13,7 +13,6 @@ class ChatApi {
   Future<String> completeChat(List<ChatMessage> messages) async {
     final chatCompletion = await OpenAI.instance.chat.create(
       model: _model,
-      maxTokens: 50,
       messages: messages
           .map((e) => OpenAIChatCompletionChoiceMessageModel(
                 role: e.isUserMessage ? 'user' : 'assistant',
