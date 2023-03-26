@@ -298,6 +298,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // register
   register() async {
+    name = name[0].toUpperCase() + name.substring(1);
     if (formkey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
