@@ -36,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String email = "";
   String gender = "";
   bool _isLoading = false;
-  bool _isanonymous = false;
+  bool _isanonymous = true;
   bool _isUserHasProfile = false;
   AuthService authService = AuthService();
   String imageUrl = '';
@@ -265,7 +265,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             name = userData.docs[0]['fullName'];
             email = userData.docs[0]['email'];
             gender = userData.docs[0]['gender'];
-
             _isanonymous = false;
           });
         } else {
@@ -275,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             email = userEmail;
             gender = "Unknown";
 
-            _isanonymous = false;
+            _isanonymous = true;
           });
         }
       }
@@ -292,6 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
+      print(_isanonymous);
     }
   }
 
