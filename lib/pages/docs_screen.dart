@@ -64,9 +64,24 @@ class _DocsScreenState extends State<DocsScreen> {
       color: Theme.of(context).primaryColor,
       child: Stack(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Doctors",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
