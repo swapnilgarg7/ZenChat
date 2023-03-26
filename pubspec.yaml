@@ -50,6 +50,7 @@ dependencies:
   firebase_storage: ^11.0.16
   chat_gpt_sdk: ^2.0.6
   dart_openai: ^1.8.4
+  progress_indicators: ^1.0.0
   
   
 

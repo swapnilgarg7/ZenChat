@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class MessageComposer extends StatelessWidget {
   MessageComposer({
@@ -23,6 +24,8 @@ class MessageComposer extends StatelessWidget {
             Expanded(
               child: !awaitingResponse
                   ? TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       controller: _messageController,
                       onSubmitted: onSubmitted,
                       decoration: const InputDecoration(
@@ -32,15 +35,15 @@ class MessageComposer extends StatelessWidget {
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(),
-                        ),
+                      children: [
+                        // const SizedBox(
+                        //   height: 24,
+                        //   width: 24,
+                        //   child: CircularProgressIndicator(),
+                        // ),
                         Padding(
                           padding: EdgeInsets.all(16),
-                          child: Text('Fetching response...'),
+                          child: FadingText('ZenChat is typing...'),
                         ),
                       ],
                     ),
