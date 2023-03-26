@@ -1,3 +1,3 @@
 class key {
-  static String openAiKey = "ENTER KEY HERE";
+  static String openAiKey = "ENTER YOUR OpenAI API KEY HERE";
 }
