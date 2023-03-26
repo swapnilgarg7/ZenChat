@@ -13,6 +13,7 @@ import 'subs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:ui';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -35,50 +36,178 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String email = "";
   String gender = "";
   bool _isLoading = false;
-  File? _imageFile;
-  final picker = ImagePicker();
   bool _isanonymous = false;
+  bool _isUserHasProfile = false;
   AuthService authService = AuthService();
+  String imageUrl = '';
 
   // function to show the bottom sheet dialog for changing or removing image
   Future<void> _showOptionsDialog() async {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.photo_camera),
-                title: Text('Change Photo'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final PickedFile =
-                      await picker.getImage(source: ImageSource.gallery);
-                  if (PickedFile != null) {
-                    setState(() {
-                      _imageFile = File(PickedFile.path);
-                    });
+          return _isanonymous
+              ? ListTile(
+                  onTap: () async {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Get Registered"),
+                            content: const Text("Are you sure to register?"),
+                            actions: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  Icons.cancel,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  await authService.signOut();
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegisterPage()),
+                                      (route) => false);
+                                },
+                                icon: const Icon(
+                                  Icons.done,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  leading: const Icon(
+                    Icons.person_outline,
+                    color: Colors.teal,
+                  ),
+                  title: const Text(
+                    "Get Registered",
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.photo_camera),
+                      title: Text('upload Photo using Camera'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        // check already image is there or not
+                        if (_isUserHasProfile == true) {
+                          removePhoto();
+                          setState(() {
+                            _isUserHasProfile = false;
+                          });
+                        }
+                        // pick the image
+                        ImagePicker imagePicker = ImagePicker();
+                        XFile? file = await imagePicker.pickImage(
+                            source: ImageSource.camera);
+                        if (file == null) return;
+                        String uniqueFileName =
+                            DateTime.now().microsecondsSinceEpoch.toString();
 
-                    // Save the image to the documents directory
-                    final directory = await getApplicationDocumentsDirectory();
-                    final imagePath = '${directory.path}/profile_image.jpg';
-                    await _imageFile!.copy(imagePath);
-                  }
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Remove Photo'),
-                onTap: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    _imageFile = null;
-                  });
-                },
-              )
-            ],
-          );
+                        // store it into firebase storage
+                        Reference referenceRoot =
+                            FirebaseStorage.instance.ref();
+                        Reference referenceDir = referenceRoot.child('images');
+                        Reference referenceImageToUpload =
+                            referenceDir.child(uniqueFileName);
+                        try {
+                          // upload the image
+                          await referenceImageToUpload.putFile(File(file.path));
+                          imageUrl =
+                              await referenceImageToUpload.getDownloadURL();
+                          // store the image in database
+                          await DataBaseService()
+                              .updateProfilePicture(email, imageUrl);
+                          setState(() {
+                            _isUserHasProfile = true;
+                            _isLoading = false;
+                          });
+                        } catch (error) {
+                          // catch the errors
+                          throw Exception("Profile Picture not uploaded");
+                        }
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.photo_album),
+                      title: Text('upload Photo using Gallery'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        if (_isUserHasProfile == true) {
+                          removePhoto();
+                          setState(() {
+                            _isUserHasProfile = false;
+                          });
+                        }
+                        // pick the image
+                        ImagePicker imagePicker = ImagePicker();
+                        XFile? file = await imagePicker.pickImage(
+                            source: ImageSource.gallery);
+                        if (file == null) return;
+                        String uniqueFileName =
+                            DateTime.now().microsecondsSinceEpoch.toString();
+                        // store it into firebase storage
+                        Reference referenceRoot =
+                            FirebaseStorage.instance.ref();
+                        Reference referenceDir = referenceRoot.child('images');
+                        Reference referenceImageToUpload =
+                            referenceDir.child(uniqueFileName);
+                        try {
+                          // upload the image
+                          await referenceImageToUpload.putFile(File(file.path));
+                          imageUrl =
+                              await referenceImageToUpload.getDownloadURL();
+                          // store the image in database
+                          await DataBaseService()
+                              .updateProfilePicture(email, imageUrl);
+                          setState(() {
+                            _isUserHasProfile = true;
+                            _isLoading = false;
+                          });
+                        } catch (error) {
+                          // catch the errors
+                          throw Exception("Profile Picture not uploaded");
+                        }
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Remove Photo'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        removePhoto();
+                        setState(() {
+                          imageUrl = "";
+                          _isUserHasProfile = false;
+                        });
+                      },
+                    )
+                  ],
+                );
         });
   }
 
@@ -88,19 +217,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     // call the gettingUserData function to fetch user data
     gettingUserData();
-    _loadImage();
+    gettingProfilePic();
   }
 
-  // function to upload the image
-  Future<void> _loadImage() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final imagePath = '${directory.path}/profile_image.jpg';
-    final imageFile = File(imagePath);
-    if (imageFile.existsSync()) {
-      setState(() {
-        _imageFile = imageFile;
-      });
-    }
+  // function to get the image url from database
+  Future<void> gettingProfilePic() async {
+    await DataBaseService().getUserProfilePictureFromEmail(email).then((value) {
+      if (value != null) {
+        setState(() {
+          imageUrl = value as String;
+          _isUserHasProfile = true;
+        });
+      } else {
+        setState(() {
+          _isUserHasProfile = false;
+        });
+      }
+    });
+  }
+
+  // function to remove the image from database
+  void removePhoto() {
+    DataBaseService().removeProfilePictureByEmail(email);
   }
 
   // function to get the user data
@@ -335,20 +473,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: <Widget>[
             const SizedBox(height: 10),
             InkWell(
-              onTap: () {
-                _showOptionsDialog();
-              },
-              child: Align(
-                alignment: Alignment.center,
-                child: CircleAvatar(
-                  radius: 80,
-                  backgroundImage: _imageFile != null
-                      ? FileImage(_imageFile!)
-                      : AssetImage('assets/profile.png')
-                          as ImageProvider<Object>,
-                ),
-              ),
-            ),
+                onTap: () {
+                  _showOptionsDialog();
+                },
+                child: ClipOval(
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: _isLoading
+                        ? CircularProgressIndicator(
+                            backgroundColor: Theme.of(context).primaryColor,
+                          )
+                        : Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                              'assets/profile.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                  ),
+                )),
             const SizedBox(height: 10),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),

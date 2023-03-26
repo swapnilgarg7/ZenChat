@@ -16,8 +16,49 @@ class DataBaseService {
       "email": email,
       "gender": gender,
       "dateOfBirth": time,
+      "profilePic": "",
       "uid": uid,
     });
+  }
+
+  // updating the user's profile picture url
+  Future updateProfilePicture(String email, String imageUrl) async {
+    QuerySnapshot snapshot =
+        await userCollection.where("email", isEqualTo: email).get();
+    if (snapshot.docs.isNotEmpty) {
+      DocumentSnapshot documentSnapshot = snapshot.docs.first;
+      return await userCollection.doc(documentSnapshot.id).update({
+        "profilePic": imageUrl,
+      });
+    } else {
+      throw Exception("User not found");
+    }
+  }
+
+  // getting the user's profile picture url from email
+  Future<String?> getUserProfilePictureFromEmail(String email) async {
+    QuerySnapshot snapshot =
+        await userCollection.where("email", isEqualTo: email).get();
+    if (snapshot.docs.isNotEmpty) {
+      DocumentSnapshot documentSnapshot = snapshot.docs.first;
+      return documentSnapshot.get("profilePic");
+    } else {
+      return null;
+    }
+  }
+
+  // remove the image
+  Future<void> removeProfilePictureByEmail(String email) async {
+    QuerySnapshot snapshot =
+        await userCollection.where("email", isEqualTo: email).get();
+    if (snapshot.docs.isNotEmpty) {
+      DocumentSnapshot documentSnapshot = snapshot.docs.first;
+      return await userCollection.doc(documentSnapshot.id).update({
+        "profilePic": FieldValue.delete(),
+      });
+    } else {
+      throw Exception("User not found");
+    }
   }
 
   // getting user data
